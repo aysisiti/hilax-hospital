@@ -17,7 +17,6 @@
       <nav>
           <a href="#" onclick="scrollToHome()">Home</a>
           <a href="#" class="btn-nav" onclick="showOverlay('login')">Login</a>
-          <a href="#" class="btn-nav" onclick="showOverlay('signup')">Create Account</a>
       </nav>
   </header>
 
@@ -63,33 +62,10 @@
       <button type="button" class="close-btn" onclick="closeOverlay()">X</button>
       <form id="loginForm">
           <h2>Login</h2>
-          <input type="email" id="login-email" placeholder="Email" required>
-          <input type="password" id="login-password" placeholder="Password" required>
+          <input type="text" id="login-id" placeholder="Email or Patient Number" autocomplete="username" autocapitalize="none" required>
+          <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
           <button type="submit" class="btn-primary">Login</button>
-      </form>
-  </section>
-
-  <!-- ================= SIGNUP OVERLAY ================= -->
-  <section id="signup" class="form-section">
-      <button type="button" class="close-btn" onclick="closeOverlay()">X</button>
-      <form id="signupForm">
-          <h2>Create an Account</h2>
-          <input type="text" id="signup-name" placeholder="Full Name" required>
-          <input type="email" id="signup-email" placeholder="Email" required>
-          <input type="password" id="signup-password" placeholder="Password" required>
-          <label for="role">Select Your Role:</label>
-          <select id="role" required>
-              <option value="" disabled selected>Select role</option>
-              <option value="patient">Patient</option>
-              <option value="physician">Physician</option>
-              <option value="nurse">Nurse</option>
-              <option value="pharmacist">Pharmacist</option>
-              <option value="medtech">MedTech</option>
-              <option value="radtech">RadTech</option>
-              <option value="hr">HR / Admin</option>
-          </select>
-          <input type="text" id="linked-number" placeholder="Patient Number or Staff Number" required>
-          <button type="submit" class="btn-primary">Sign Up</button>
+          <p id="login-msg" class="form-msg" role="alert"></p>
       </form>
   </section>
 
@@ -99,7 +75,10 @@
   </footer>
 
   <!-- ================= LINK JS ================= -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
   <script src="scripts.js"></script>
-  <script src="signup.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>

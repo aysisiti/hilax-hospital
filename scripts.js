@@ -1,4 +1,4 @@
-// ===== Show overlay for login/signup =====
+// ===== Show login overlay =====
 function showOverlay(sectionId){
     document.getElementById(sectionId).style.display = 'flex';
     window.scrollTo(0,0);
@@ -7,7 +7,7 @@ function showOverlay(sectionId){
 // ===== Close overlay =====
 function closeOverlay(){
     document.getElementById('login').style.display = 'none';
-    document.getElementById('signup').style.display = 'none';
+    document.getElementById('login-msg').textContent = '';
 }
 
 // ===== Scroll back to home =====

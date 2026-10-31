@@ -100,10 +100,77 @@ nav a.btn-nav:hover {
     position: relative;
 }
 
+.form-section form {
+    width: calc(100% - 2rem);
+    box-sizing: border-box;
+}
+
+.form-section input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0.5rem 0;
+    padding: 0.6rem;
+    font-size: 16px; /* stops phones zooming in on focus */
+    border: 1px solid #ffb3d1;
+    border-radius: 6px;
+}
+
+.form-section h2 {
+    margin-top: 0;
+    color: #d63384;
+}
+
+.form-section button[type="submit"] {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.7rem 1rem;
+    font-size: 16px;
+}
+
+.form-section button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.form-msg {
+    min-height: 1.2em;
+    margin: 0.6rem 0 0;
+    color: #c0123c;
+    font-size: 0.9rem;
+}
+
 .close-btn {
     position: absolute;
     top: 10px; right: 10px;
     cursor: pointer;
+    z-index: 1;
+}
+
+/* ===== DASHBOARD ===== */
+.dash {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+.dash[hidden] {
+    display: none;
+}
+
+.dash-card {
+    background: #fff0f6;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+}
+
+.dash-card h2 {
+    margin: 0 0 0.25rem;
+    color: #d63384;
+}
+
+.dash-card p {
+    margin: 0;
 }
 
 /* ===== BUTTONS ===== */
