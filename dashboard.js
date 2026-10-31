@@ -17,6 +17,7 @@ function showDashboard(profile) {
     document.getElementById('dash-role').textContent =
         (ROLE_LABELS[profile.role_name] || profile.role_name) + ' · ' + number;
     document.getElementById('dash').hidden = false;
+    if (profile.role_name === 'hr_admin') initAdmin(profile);
 }
 
 function askNewPassword() {

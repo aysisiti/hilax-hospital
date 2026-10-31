@@ -22,6 +22,26 @@
     <h2 id="dash-name"></h2>
     <p id="dash-role"></p>
   </section>
+
+  <!-- HR / Admin: account management -->
+  <section id="admin-panel" class="panel" hidden>
+    <div class="panel-bar">
+      <input type="search" id="acc-search" placeholder="Search name or number" autocomplete="off">
+      <select id="acc-filter" aria-label="Filter by role">
+        <option value="">All roles</option>
+        <option value="patient">Patient</option>
+        <option value="physician">Physician</option>
+        <option value="nurse">Nurse</option>
+        <option value="pharmacist">Pharmacist</option>
+        <option value="medtech">MedTech</option>
+        <option value="radtech">RadTech</option>
+        <option value="hr_admin">HR / Admin</option>
+      </select>
+      <button type="button" class="btn-primary" id="new-account-btn">+ New account</button>
+    </div>
+    <p id="acc-msg" class="form-msg" role="alert"></p>
+    <div id="acc-list" class="acc-list"></div>
+  </section>
 </main>
 
 <!-- Shown to new accounts until they replace the temporary password -->
@@ -36,9 +56,55 @@
   </form>
 </section>
 
+<!-- HR / Admin: new account -->
+<section id="create-overlay" class="form-section">
+  <button type="button" class="close-btn" id="create-close">X</button>
+  <form id="createForm">
+    <h2>New Account</h2>
+    <select id="c-role" required>
+      <option value="patient">Patient</option>
+      <option value="physician">Physician</option>
+      <option value="nurse">Nurse</option>
+      <option value="pharmacist">Pharmacist</option>
+      <option value="medtech">MedTech</option>
+      <option value="radtech">RadTech</option>
+      <option value="hr_admin">HR / Admin</option>
+    </select>
+    <input type="text" id="c-name" placeholder="Full name" maxlength="120" autocomplete="off" required>
+    <input type="email" id="c-email" placeholder="Email" maxlength="254" autocomplete="off" autocapitalize="none">
+    <div id="c-patient-fields">
+      <input type="number" id="c-age" placeholder="Age" min="0" max="150" step="1" inputmode="numeric">
+      <select id="c-sex">
+        <option value="" disabled selected>Sex</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+      <input type="text" id="c-address" placeholder="Address" maxlength="300" autocomplete="off">
+    </div>
+    <button type="submit" class="btn-primary">Create</button>
+    <p id="create-msg" class="form-msg" role="alert"></p>
+  </form>
+</section>
+
+<!-- HR / Admin: shown once after creating an account or resetting a password -->
+<section id="cred-overlay" class="form-section">
+  <div class="cred-box">
+    <h2 id="cred-title"></h2>
+    <p class="cred-name" id="cred-name"></p>
+    <p class="cred-label">Login</p>
+    <p class="cred-value" id="cred-login"></p>
+    <p class="cred-label">Password</p>
+    <p class="cred-value" id="cred-password"></p>
+    <button type="button" class="btn-primary" id="cred-copy">Copy</button>
+    <button type="button" class="btn-secondary" id="cred-close">Done</button>
+  </div>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
+<script src="admin.js"></script>
 <script src="dashboard.js"></script>
 </body>
 </html>
