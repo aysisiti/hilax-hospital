@@ -25,10 +25,23 @@ function askNewPassword() {
     document.getElementById('pw-overlay').style.display = 'flex';
 }
 
+// Tabs in the same browser share one login. If another tab logs out or signs in
+// as someone else, this page must not keep acting as the old user.
+let currentUserId = null;
+sb.auth.onAuthStateChange(function (event, session) {
+    if (!currentUserId) return;
+    if (!session) {
+        if (event === 'SIGNED_OUT') goHome();
+        return;
+    }
+    if (session.user.id !== currentUserId) window.location.reload();
+});
+
 async function loadDashboard() {
     // getUser asks the server, so a removed or disabled login is caught here.
     const { data, error } = await sb.auth.getUser();
     if (error || !data || !data.user) return goHome();
+    currentUserId = data.user.id;
 
     const profile = await getProfile(data.user.id);
     if (!profile || !profile.active || !ROLE_LABELS[profile.role_name]) {
