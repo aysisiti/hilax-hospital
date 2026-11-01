@@ -23,6 +23,39 @@
     <p id="dash-role"></p>
   </section>
 
+  <!-- Staff: patient list and records -->
+  <section id="staff-panel" class="panel" hidden>
+    <div id="st-list-view">
+      <input type="search" id="st-search" class="search-box" placeholder="Search patient name or number" autocomplete="off">
+      <p id="st-msg" class="form-msg" role="alert"></p>
+      <div id="st-list" class="acc-list"></div>
+    </div>
+
+    <div id="st-detail-view" hidden>
+      <button type="button" id="st-back" class="btn-small">&larr; Patients</button>
+      <div class="dash-card st-patient">
+        <h2 id="st-pt-name"></h2>
+        <p id="st-pt-sub"></p>
+      </div>
+
+      <form id="vitalsForm" class="inline-form" hidden novalidate>
+        <h3>Record vitals</h3>
+        <div class="form-grid">
+          <input type="number" id="vt-hr" placeholder="Heart rate (bpm)" inputmode="numeric" min="20" max="300" step="1" autocomplete="off">
+          <input type="number" id="vt-temp" placeholder="Temp (&deg;C)" inputmode="decimal" min="30" max="45" step="0.1" autocomplete="off">
+          <input type="number" id="vt-sys" placeholder="Systolic" inputmode="numeric" min="50" max="300" step="1" autocomplete="off">
+          <input type="number" id="vt-dia" placeholder="Diastolic" inputmode="numeric" min="30" max="200" step="1" autocomplete="off">
+        </div>
+        <button type="submit" class="btn-primary">Save</button>
+        <p id="vt-msg" class="form-msg" role="alert"></p>
+      </form>
+
+      <div id="st-tabs" class="tabs"></div>
+      <p id="st-rec-msg" class="form-msg" role="alert"></p>
+      <div id="st-records" class="acc-list"></div>
+    </div>
+  </section>
+
   <!-- Patient: own records -->
   <section id="patient-panel" class="panel" hidden>
     <div id="pt-tabs" class="tabs">
@@ -118,7 +151,9 @@
 <script src="config.js"></script>
 <script src="app.js"></script>
 <script src="admin.js"></script>
+<script src="records.js"></script>
 <script src="patient.js"></script>
+<script src="staff.js"></script>
 <script src="dashboard.js"></script>
 </body>
 </html>

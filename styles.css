@@ -311,6 +311,80 @@ nav a.btn-nav:hover {
     padding: 1rem 0;
 }
 
+/* ===== STAFF VIEW ===== */
+.search-box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem;
+    font-size: 16px;
+    border: 1px solid #ffb3d1;
+    border-radius: 6px;
+}
+
+.acc-btn {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.acc-btn:hover {
+    background: #fff0f6;
+}
+
+.st-patient {
+    margin-top: 0.75rem;
+}
+
+.inline-form {
+    background: #fff0f6;
+    border-radius: 8px;
+    padding: 0.75rem 1rem 1rem;
+    margin: 0.75rem 0;
+}
+
+.inline-form[hidden] {
+    display: none;
+}
+
+.inline-form h3 {
+    margin: 0 0 0.5rem;
+    color: #d63384;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.form-grid input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem;
+    font-size: 16px;
+    border: 1px solid #ffb3d1;
+    border-radius: 6px;
+    min-width: 0;
+}
+
+.inline-form button[type="submit"] {
+    padding: 0.6rem 1.5rem;
+    font-size: 16px;
+}
+
+.inline-form button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.form-ok {
+    color: #1b7a46;
+}
+
 /* ===== RECORD TABS AND CARDS (patient and staff views) ===== */
 .tabs {
     display: flex;
