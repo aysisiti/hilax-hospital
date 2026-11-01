@@ -18,6 +18,7 @@ function showDashboard(profile) {
         (ROLE_LABELS[profile.role_name] || profile.role_name) + ' · ' + number;
     document.getElementById('dash').hidden = false;
     if (profile.role_name === 'hr_admin') initAdmin(profile);
+    if (profile.role_name === 'patient') initPatient();
 }
 
 function askNewPassword() {

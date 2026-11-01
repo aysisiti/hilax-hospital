@@ -23,6 +23,19 @@
     <p id="dash-role"></p>
   </section>
 
+  <!-- Patient: own records -->
+  <section id="patient-panel" class="panel" hidden>
+    <div id="pt-tabs" class="tabs">
+      <button type="button" data-tab="vitals" class="active">Vitals</button>
+      <button type="button" data-tab="prescriptions">Prescriptions</button>
+      <button type="button" data-tab="labs">Lab results</button>
+      <button type="button" data-tab="imaging">Imaging</button>
+      <button type="button" data-tab="bills">Bills</button>
+    </div>
+    <p id="pt-msg" class="form-msg" role="alert"></p>
+    <div id="pt-content" class="acc-list"></div>
+  </section>
+
   <!-- HR / Admin: account management -->
   <section id="admin-panel" class="panel" hidden>
     <div class="panel-bar">
@@ -105,6 +118,7 @@
 <script src="config.js"></script>
 <script src="app.js"></script>
 <script src="admin.js"></script>
+<script src="patient.js"></script>
 <script src="dashboard.js"></script>
 </body>
 </html>

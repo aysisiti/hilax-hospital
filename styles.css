@@ -311,6 +311,79 @@ nav a.btn-nav:hover {
     padding: 1rem 0;
 }
 
+/* ===== RECORD TABS AND CARDS (patient and staff views) ===== */
+.tabs {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tabs button {
+    flex: 0 0 auto;
+    background: #fff;
+    color: #d63384;
+    border: 1px solid #ff99c8;
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font-size: 15px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.tabs button.active {
+    background: #ff66a3;
+    color: #fff;
+    border-color: #ff66a3;
+}
+
+.rec-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    background: #fff;
+    border: 1px solid #ffd1e3;
+    border-radius: 8px;
+}
+
+.rec-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.rec-head strong {
+    overflow-wrap: anywhere;
+}
+
+.rec-tag {
+    background: #e6f7ee;
+    color: #1b7a46;
+    border-radius: 4px;
+    padding: 0.05rem 0.45rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.rec-line {
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+}
+
+.rec-date {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.rec-link {
+    color: #d63384;
+    font-weight: bold;
+}
+
 /* ===== ONE-TIME CREDENTIALS ===== */
 .cred-box {
     background: #fff;
