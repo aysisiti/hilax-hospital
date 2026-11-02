@@ -7,7 +7,8 @@
     const { el, TABS, load } = window.HilaxRecords;
 
     const ROLE_CONFIG = {
-        nurse: { tabs: ['vitals', 'prescriptions', 'labs', 'imaging'], addVitals: true }
+        nurse: { tabs: ['vitals', 'prescriptions', 'labs', 'imaging'], addVitals: true },
+        physician: { tabs: ['prescriptions', 'vitals', 'labs', 'imaging'], addPrescription: true }
     };
 
     let started = false;
@@ -77,6 +78,9 @@
         $('vitalsForm').hidden = !config.addVitals;
         $('vitalsForm').reset();
         setVitalsMessage('', false);
+        $('prescriptionForm').hidden = !config.addPrescription;
+        $('prescriptionForm').reset();
+        setPrescriptionMessage('', false);
 
         const tabs = $('st-tabs');
         tabs.replaceChildren();
@@ -178,6 +182,50 @@
         showTab('vitals');
     }
 
+    // ----- physician: write a prescription -----
+    function setPrescriptionMessage(text, good) {
+        const node = $('rx-msg');
+        node.textContent = text;
+        node.className = good ? 'form-msg form-ok' : 'form-msg';
+    }
+
+    // One line of text, 1 to 120 characters, no control characters.
+    function cleanText(raw) {
+        const text = raw.replace(/\s+/g, ' ').trim();
+        return text.length >= 1 && text.length <= 120 && !/[\u0000-\u001f\u007f]/.test(text) ? text : null;
+    }
+
+    async function submitPrescription(e) {
+        e.preventDefault();
+        if (!current) return;
+        const medication = cleanText($('rx-med').value);
+        const dosage = cleanText($('rx-dose').value);
+        const frequency = cleanText($('rx-freq').value);
+        if (!medication) { setPrescriptionMessage('Enter the medication', false); return; }
+        if (!dosage) { setPrescriptionMessage('Enter the dosage', false); return; }
+        if (!frequency) { setPrescriptionMessage('Enter the frequency', false); return; }
+
+        const button = $('prescriptionForm').querySelector('button[type="submit"]');
+        button.disabled = true;
+        setPrescriptionMessage('', false);
+        const { error } = await sb.from('prescriptions').insert({
+            patient_id: current.patient_id,
+            physician_id: myId,
+            medication_name: medication,
+            dosage: dosage,
+            frequency: frequency
+        });
+        button.disabled = false;
+
+        if (error) {
+            setPrescriptionMessage(error.code === '23514' ? 'Check the values' : 'Could not save', false);
+            return;
+        }
+        $('prescriptionForm').reset();
+        setPrescriptionMessage('Saved', true);
+        showTab('prescriptions');
+    }
+
     // ----- start -----
     window.initStaff = function (profile) {
         config = ROLE_CONFIG[profile.role_name];
@@ -189,6 +237,7 @@
         $('st-search').addEventListener('input', renderPatients);
         $('st-back').addEventListener('click', closePatient);
         $('vitalsForm').addEventListener('submit', submitVitals);
+        $('prescriptionForm').addEventListener('submit', submitPrescription);
         loadPatients();
     };
 })();

@@ -50,6 +50,17 @@
         <p id="vt-msg" class="form-msg" role="alert"></p>
       </form>
 
+      <form id="prescriptionForm" class="inline-form" hidden novalidate>
+        <h3>New prescription</h3>
+        <input type="text" id="rx-med" placeholder="Medication" maxlength="120" autocomplete="off">
+        <div class="form-grid">
+          <input type="text" id="rx-dose" placeholder="Dosage" maxlength="120" autocomplete="off">
+          <input type="text" id="rx-freq" placeholder="Frequency" maxlength="120" autocomplete="off">
+        </div>
+        <button type="submit" class="btn-primary">Save</button>
+        <p id="rx-msg" class="form-msg" role="alert"></p>
+      </form>
+
       <div id="st-tabs" class="tabs"></div>
       <p id="st-rec-msg" class="form-msg" role="alert"></p>
       <div id="st-records" class="acc-list"></div>
