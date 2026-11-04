@@ -354,7 +354,8 @@ nav a.btn-nav:hover {
     color: #d63384;
 }
 
-.inline-form > input {
+.inline-form > input,
+.inline-form > textarea {
     display: block;
     width: 100%;
     box-sizing: border-box;
@@ -363,6 +364,11 @@ nav a.btn-nav:hover {
     font-size: 16px;
     border: 1px solid #ffb3d1;
     border-radius: 6px;
+}
+
+.inline-form > textarea {
+    font-family: inherit;
+    resize: vertical;
 }
 
 .form-grid {

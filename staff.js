@@ -9,7 +9,8 @@
     const ROLE_CONFIG = {
         nurse: { tabs: ['vitals', 'prescriptions', 'labs', 'imaging'], addVitals: true },
         physician: { tabs: ['prescriptions', 'vitals', 'labs', 'imaging'], addPrescription: true },
-        pharmacist: { tabs: ['prescriptions', 'vitals'], canDispense: true }
+        pharmacist: { tabs: ['prescriptions', 'vitals'], canDispense: true },
+        medtech: { tabs: ['labs', 'vitals'], addLab: true }
     };
 
     let started = false;
@@ -82,6 +83,9 @@
         $('prescriptionForm').hidden = !config.addPrescription;
         $('prescriptionForm').reset();
         setPrescriptionMessage('', false);
+        $('labForm').hidden = !config.addLab;
+        $('labForm').reset();
+        setLabMessage('', false);
 
         const tabs = $('st-tabs');
         tabs.replaceChildren();
@@ -296,6 +300,50 @@
         showTab('prescriptions');
     }
 
+    // ----- medtech: enter a lab result -----
+    function setLabMessage(text, good) {
+        const node = $('lab-msg');
+        node.textContent = text;
+        node.className = good ? 'form-msg form-ok' : 'form-msg';
+    }
+
+    async function submitLab(e) {
+        e.preventDefault();
+        if (!current) return;
+        const testName = cleanText($('lab-test').value);
+        // Results may span several lines, so keep line breaks (but tidy spaces and blank runs).
+        const results = $('lab-results').value
+            .replace(/\r\n?/g, '\n')
+            .replace(/[ \t]+/g, ' ')
+            .replace(/\n{3,}/g, '\n\n')
+            .trim();
+        if (!testName) { setLabMessage('Enter the test name', false); return; }
+        if (!results) { setLabMessage('Enter the results', false); return; }
+        if (results.length > 5000 || /[\u0000-\u0008\u000b-\u001f\u007f]/.test(results)) {
+            setLabMessage('Check the results', false);
+            return;
+        }
+
+        const button = $('labForm').querySelector('button[type="submit"]');
+        button.disabled = true;
+        setLabMessage('', false);
+        const { error } = await sb.from('lab_results').insert({
+            patient_id: current.patient_id,
+            medtech_id: myId,
+            test_name: testName,
+            results: results
+        });
+        button.disabled = false;
+
+        if (error) {
+            setLabMessage(error.code === '23514' ? 'Check the values' : 'Could not save', false);
+            return;
+        }
+        $('labForm').reset();
+        setLabMessage('Saved', true);
+        showTab('labs');
+    }
+
     // ----- start -----
     window.initStaff = function (profile) {
         config = ROLE_CONFIG[profile.role_name];
@@ -308,6 +356,7 @@
         $('st-back').addEventListener('click', closePatient);
         $('vitalsForm').addEventListener('submit', submitVitals);
         $('prescriptionForm').addEventListener('submit', submitPrescription);
+        $('labForm').addEventListener('submit', submitLab);
         loadPatients();
     };
 })();
