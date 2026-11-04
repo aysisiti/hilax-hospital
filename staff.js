@@ -8,7 +8,8 @@
 
     const ROLE_CONFIG = {
         nurse: { tabs: ['vitals', 'prescriptions', 'labs', 'imaging'], addVitals: true },
-        physician: { tabs: ['prescriptions', 'vitals', 'labs', 'imaging'], addPrescription: true }
+        physician: { tabs: ['prescriptions', 'vitals', 'labs', 'imaging'], addPrescription: true },
+        pharmacist: { tabs: ['prescriptions', 'vitals'], canDispense: true }
     };
 
     let started = false;
@@ -123,7 +124,76 @@
             box.appendChild(el('p', 'acc-empty', 'No records'));
             return;
         }
-        result.rows.forEach((row) => box.appendChild(TABS[name].render(row, result.extra, { myId: myId })));
+        let rows = result.rows;
+        if (config.canDispense && name === 'prescriptions') {
+            // Pending prescriptions first (the sort keeps newest-first within each group).
+            const isDone = (r) => (result.extra[r.prescription_id] ? 1 : 0);
+            rows = rows.slice().sort((a, b) => isDone(a) - isDone(b));
+        }
+        const ctx = { myId: myId, prescriptionAction: config.canDispense ? dispenseControl : null };
+        rows.forEach((row) => box.appendChild(TABS[name].render(row, result.extra, ctx)));
+    }
+
+    // ----- pharmacist: dispense a prescription -----
+    function setRecMessage(text, good) {
+        const node = $('st-rec-msg');
+        node.textContent = text;
+        node.className = good ? 'form-msg form-ok' : 'form-msg';
+    }
+
+    function dispenseControl(row) {
+        const wrap = el('div', 'rec-action');
+        const start = el('button', 'btn-small', 'Dispense');
+        start.type = 'button';
+        wrap.appendChild(start);
+
+        start.addEventListener('click', () => {
+            wrap.replaceChildren();
+            const note = el('input', 'rec-note');
+            note.type = 'text';
+            note.placeholder = 'Note (optional)';
+            note.maxLength = 500;
+            note.autocomplete = 'off';
+            const confirm = el('button', 'btn-small btn-confirm', 'Confirm');
+            confirm.type = 'button';
+            const cancel = el('button', 'btn-small', 'Cancel');
+            cancel.type = 'button';
+            cancel.addEventListener('click', () => wrap.replaceChildren(start));
+            confirm.addEventListener('click', () => dispense(row, note.value, confirm, cancel));
+            const buttons = el('div', 'rec-action-buttons');
+            buttons.append(confirm, cancel);
+            wrap.append(note, buttons);
+            note.focus();
+        });
+        return wrap;
+    }
+
+    async function dispense(row, noteRaw, confirm, cancel) {
+        const note = noteRaw.replace(/\s+/g, ' ').trim();
+        if (note.length > 500 || /[\u0000-\u001f\u007f]/.test(note)) {
+            setRecMessage('Check the note', false);
+            return;
+        }
+        confirm.disabled = true;
+        cancel.disabled = true;
+        setRecMessage('', false);
+
+        const { error } = await sb.from('dispense_logs').insert({
+            prescription_id: row.prescription_id,
+            pharmacist_id: myId,
+            notes: note || null
+        });
+
+        if (error && error.code !== '23505') {
+            confirm.disabled = false;
+            cancel.disabled = false;
+            setRecMessage('Could not save', false);
+            return;
+        }
+        // Saved, or someone else already dispensed it: refresh to show the true state.
+        const alreadyDone = !!error;
+        await showTab('prescriptions');
+        setRecMessage(alreadyDone ? 'Already dispensed' : 'Dispensed', !alreadyDone);
     }
 
     // ----- nurse: record vitals -----

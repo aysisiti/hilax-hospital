@@ -75,12 +75,16 @@ window.HilaxRecords = (function () {
                 (data || []).forEach((d) => { map[d.prescription_id] = d.dispensed_at; });
                 return map;
             },
-            render: (r, dispensed) => card(
-                r.medication_name,
-                [r.dosage + ' · ' + r.frequency,
-                    dispensed[r.prescription_id] ? 'Dispensed ' + formatDate(dispensed[r.prescription_id]) : null],
-                r.created_at,
-                dispensed[r.prescription_id] ? 'Dispensed' : null)
+            render: (r, dispensed, ctx) => {
+                const done = dispensed[r.prescription_id];
+                const lines = [
+                    r.dosage + ' · ' + r.frequency,
+                    done ? 'Dispensed ' + formatDate(done) : null
+                ];
+                // Pharmacists get a Dispense control on prescriptions not yet dispensed.
+                if (!done && ctx && ctx.prescriptionAction) lines.push(ctx.prescriptionAction(r));
+                return card(r.medication_name, lines, r.created_at, done ? 'Dispensed' : null);
+            }
         },
         labs: {
             label: 'Lab results',
