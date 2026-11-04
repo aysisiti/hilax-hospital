@@ -24,14 +24,42 @@ window.HilaxRecords = (function () {
         return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(amount);
     }
 
-    // Only plain web links are made clickable.
-    function safeUrl(value) {
-        try {
-            const url = new URL(String(value));
-            return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : null;
-        } catch (err) {
-            return null;
-        }
+    // Images sit in a private bucket: ask for a short-lived link each time one is opened.
+    function imageControl(path) {
+        const wrap = el('div', 'rec-image');
+        const button = el('button', 'btn-small', 'View image');
+        button.type = 'button';
+        const note = el('span', 'form-msg');
+        let img = null;
+        button.addEventListener('click', async () => {
+            if (img) {
+                img.remove();
+                img = null;
+                button.textContent = 'View image';
+                return;
+            }
+            button.disabled = true;
+            note.textContent = '';
+            const { data, error } = await sb.storage.from('imaging').createSignedUrl(path, 300);
+            button.disabled = false;
+            if (error || !data || !data.signedUrl) {
+                note.textContent = 'Could not load image';
+                return;
+            }
+            img = el('img', 'rec-img');
+            img.alt = 'Imaging result';
+            img.addEventListener('error', () => {
+                note.textContent = 'Could not load image';
+                if (img) img.remove();
+                img = null;
+                button.textContent = 'View image';
+            });
+            img.src = data.signedUrl;
+            wrap.appendChild(img);
+            button.textContent = 'Hide image';
+        });
+        wrap.append(button, note);
+        return wrap;
     }
 
     function card(title, lines, date, tag) {
@@ -95,17 +123,10 @@ window.HilaxRecords = (function () {
         imaging: {
             label: 'Imaging',
             table: 'imaging_results',
-            columns: 'imaging_id, imaging_type, findings, image_url, created_at',
+            columns: 'imaging_id, imaging_type, findings, image_path, created_at',
             render: (r) => {
                 const lines = [r.findings];
-                const href = r.image_url ? safeUrl(r.image_url) : null;
-                if (href) {
-                    const link = el('a', 'rec-link', 'View image');
-                    link.href = href;
-                    link.target = '_blank';
-                    link.rel = 'noopener noreferrer';
-                    lines.push(link);
-                }
+                if (r.image_path) lines.push(imageControl(r.image_path));
                 return card(r.imaging_type, lines, r.created_at);
             }
         },

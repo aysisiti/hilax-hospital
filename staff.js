@@ -10,7 +10,8 @@
         nurse: { tabs: ['vitals', 'prescriptions', 'labs', 'imaging'], addVitals: true },
         physician: { tabs: ['prescriptions', 'vitals', 'labs', 'imaging'], addPrescription: true },
         pharmacist: { tabs: ['prescriptions', 'vitals'], canDispense: true },
-        medtech: { tabs: ['labs', 'vitals'], addLab: true }
+        medtech: { tabs: ['labs', 'vitals'], addLab: true },
+        radtech: { tabs: ['imaging', 'vitals'], addImaging: true }
     };
 
     let started = false;
@@ -86,6 +87,9 @@
         $('labForm').hidden = !config.addLab;
         $('labForm').reset();
         setLabMessage('', false);
+        $('imagingForm').hidden = !config.addImaging;
+        $('imagingForm').reset();
+        setImagingMessage('', false);
 
         const tabs = $('st-tabs');
         tabs.replaceChildren();
@@ -344,6 +348,66 @@
         showTab('labs');
     }
 
+    // ----- radtech: add an imaging result with its image -----
+    const IMAGE_TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+
+    function setImagingMessage(text, good) {
+        const node = $('img-msg');
+        node.textContent = text;
+        node.className = good ? 'form-msg form-ok' : 'form-msg';
+    }
+
+    async function submitImaging(e) {
+        e.preventDefault();
+        if (!current) return;
+        const imagingType = cleanText($('img-type').value);
+        const findings = $('img-findings').value
+            .replace(/\r\n?/g, '\n')
+            .replace(/[ \t]+/g, ' ')
+            .replace(/\n{3,}/g, '\n\n')
+            .trim();
+        const file = $('img-file').files[0];
+        if (!imagingType) { setImagingMessage('Enter the imaging type', false); return; }
+        if (!findings) { setImagingMessage('Enter the findings', false); return; }
+        if (findings.length > 5000 || /[\u0000-\u0008\u000b-\u001f\u007f]/.test(findings)) {
+            setImagingMessage('Check the findings', false);
+            return;
+        }
+        if (!file) { setImagingMessage('Choose an image', false); return; }
+        const ext = IMAGE_TYPES[file.type];
+        if (!ext) { setImagingMessage('Image must be JPG, PNG or WebP', false); return; }
+        if (file.size > 10 * 1024 * 1024) { setImagingMessage('Image must be under 10 MB', false); return; }
+
+        const button = $('imagingForm').querySelector('button[type="submit"]');
+        button.disabled = true;
+        setImagingMessage('Saving...', false);
+
+        const path = current.patient_id + '/' + crypto.randomUUID() + '.' + ext;
+        const up = await sb.storage.from('imaging').upload(path, file, { contentType: file.type, upsert: false });
+        if (up.error) {
+            button.disabled = false;
+            setImagingMessage('Could not upload image', false);
+            return;
+        }
+        const { error } = await sb.from('imaging_results').insert({
+            patient_id: current.patient_id,
+            radtech_id: myId,
+            imaging_type: imagingType,
+            findings: findings,
+            image_path: path
+        });
+        button.disabled = false;
+
+        if (error) {
+            await sb.storage.from('imaging').remove([path]); // don't leave an unused file behind
+            setImagingMessage(error.code === '23514' ? 'Check the values' : 'Could not save', false);
+            return;
+        }
+        $('imagingForm').reset();
+        setImagingMessage('Saved', true);
+        showTab('imaging');
+    }
+
     // ----- start -----
     window.initStaff = function (profile) {
         config = ROLE_CONFIG[profile.role_name];
@@ -357,6 +421,7 @@
         $('vitalsForm').addEventListener('submit', submitVitals);
         $('prescriptionForm').addEventListener('submit', submitPrescription);
         $('labForm').addEventListener('submit', submitLab);
+        $('imagingForm').addEventListener('submit', submitImaging);
         loadPatients();
     };
 })();

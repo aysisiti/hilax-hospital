@@ -69,6 +69,15 @@
         <p id="lab-msg" class="form-msg" role="alert"></p>
       </form>
 
+      <form id="imagingForm" class="inline-form" hidden novalidate>
+        <h3>New imaging result</h3>
+        <input type="text" id="img-type" placeholder="Imaging type (e.g. Chest X-ray)" maxlength="120" autocomplete="off">
+        <textarea id="img-findings" placeholder="Findings" rows="4" maxlength="5000"></textarea>
+        <input type="file" id="img-file" accept="image/jpeg,image/png,image/webp">
+        <button type="submit" class="btn-primary">Save</button>
+        <p id="img-msg" class="form-msg" role="alert"></p>
+      </form>
+
       <div id="st-tabs" class="tabs"></div>
       <p id="st-rec-msg" class="form-msg" role="alert"></p>
       <div id="st-records" class="acc-list"></div>

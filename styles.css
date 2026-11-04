@@ -562,3 +562,19 @@ nav a.btn-nav:hover {
 .btn-primary:hover {
     background-color: #d63384;
 }
+
+/* ===== IMAGING ===== */
+.rec-image {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin: 0.3rem 0;
+}
+
+.rec-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid #ffd1e3;
+}
