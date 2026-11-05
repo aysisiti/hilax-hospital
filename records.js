@@ -81,8 +81,8 @@ window.HilaxRecords = (function () {
     const TABS = {
         vitals: {
             label: 'Vitals',
-            table: 'vitals',
-            columns: 'vitals_id, nurse_id, heart_rate, blood_pressure, temperature, created_at',
+            table: 'vital_signs',
+            columns: 'vital_id, nurse_id, heart_rate, blood_pressure, temperature, created_at',
             render: (r, extra, ctx) => card(
                 'BP ' + r.blood_pressure,
                 ['Heart rate ' + r.heart_rate + ' bpm', 'Temperature ' + r.temperature + ' °C'],

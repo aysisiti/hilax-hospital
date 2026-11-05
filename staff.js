@@ -242,7 +242,7 @@
         const button = $('vitalsForm').querySelector('button[type="submit"]');
         button.disabled = true;
         setVitalsMessage('', false);
-        const { error } = await sb.from('vitals').insert({
+        const { error } = await sb.from('vital_signs').insert({
             patient_id: current.patient_id,
             nurse_id: myId,
             heart_rate: checked.values.heart_rate,
