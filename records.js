@@ -146,8 +146,16 @@ window.HilaxRecords = (function () {
             .order('created_at', { ascending: false })
             .limit(50);
         if (patientId) query = query.eq('patient_id', patientId);
-        const { data, error } = await query;
-        if (error) return null;
+        let { data, error } = await query;
+        if (error) {
+            // A dropped connection or a token being refreshed can fail once: try again.
+            await new Promise((resolve) => setTimeout(resolve, 700));
+            ({ data, error } = await query);
+        }
+        if (error) {
+            console.warn('Could not load ' + name + ':', error.message || error);
+            return null;
+        }
         const rows = data || [];
         return { rows: rows, extra: tab.extra ? await tab.extra(rows) : null };
     }
