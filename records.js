@@ -133,8 +133,8 @@ window.HilaxRecords = (function () {
         bills: {
             label: 'Bills',
             table: 'billing',
-            columns: 'billing_id, amount, description, created_at',
-            render: (r) => card(formatMoney(r.amount), [r.description], r.created_at)
+            columns: 'billing_id, amount, description, created_at, paid_at',
+            render: (r) => card(formatMoney(r.amount), [r.description, r.paid_at ? 'Paid ' + formatDate(r.paid_at) : 'Unpaid'], r.created_at, r.paid_at ? 'Paid' : null)
         }
     };
 

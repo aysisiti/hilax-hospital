@@ -99,22 +99,50 @@
 
   <!-- HR / Admin: account management -->
   <section id="admin-panel" class="panel" hidden>
-    <div class="panel-bar">
-      <input type="search" id="acc-search" placeholder="Search name or number" autocomplete="off">
-      <select id="acc-filter" aria-label="Filter by role">
-        <option value="">All roles</option>
-        <option value="patient">Patient</option>
-        <option value="physician">Physician</option>
-        <option value="nurse">Nurse</option>
-        <option value="pharmacist">Pharmacist</option>
-        <option value="medtech">MedTech</option>
-        <option value="radtech">RadTech</option>
-        <option value="hr_admin">HR / Admin</option>
-      </select>
-      <button type="button" class="btn-primary" id="new-account-btn">+ New account</button>
+    <div id="adm-tabs" class="tabs">
+      <button type="button" data-section="accounts" class="active">Accounts</button>
+      <button type="button" data-section="billing">Billing</button>
     </div>
-    <p id="acc-msg" class="form-msg" role="alert"></p>
-    <div id="acc-list" class="acc-list"></div>
+    <div id="adm-accounts">
+      <div class="panel-bar">
+        <input type="search" id="acc-search" placeholder="Search name or number" autocomplete="off">
+        <select id="acc-filter" aria-label="Filter by role">
+          <option value="">All roles</option>
+          <option value="patient">Patient</option>
+          <option value="physician">Physician</option>
+          <option value="nurse">Nurse</option>
+          <option value="pharmacist">Pharmacist</option>
+          <option value="medtech">MedTech</option>
+          <option value="radtech">RadTech</option>
+          <option value="hr_admin">HR / Admin</option>
+        </select>
+        <button type="button" class="btn-primary" id="new-account-btn">+ New account</button>
+      </div>
+      <p id="acc-msg" class="form-msg" role="alert"></p>
+      <div id="acc-list" class="acc-list"></div>
+    </div>
+
+    <div id="adm-billing" hidden>
+      <form id="billForm" class="inline-form" novalidate>
+        <h3>New bill</h3>
+        <select id="bl-patient" aria-label="Patient"><option value="">Choose patient</option></select>
+        <div class="form-grid">
+          <input type="text" id="bl-amount" placeholder="Amount (PHP)" inputmode="decimal" maxlength="12" autocomplete="off">
+          <input type="text" id="bl-desc" placeholder="Description" maxlength="500" autocomplete="off">
+        </div>
+        <button type="submit" class="btn-primary">Save</button>
+        <p id="bl-msg" class="form-msg" role="alert"></p>
+      </form>
+      <div class="panel-bar">
+        <select id="bl-filter" aria-label="Filter bills">
+          <option value="">All bills</option>
+          <option value="unpaid">Unpaid</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+      <p id="bl-list-msg" class="form-msg" role="alert"></p>
+      <div id="bl-list" class="acc-list"></div>
+    </div>
   </section>
 </main>
 
@@ -180,6 +208,7 @@
 <script src="app.js"></script>
 <script src="admin.js"></script>
 <script src="records.js"></script>
+<script src="billing.js"></script>
 <script src="patient.js"></script>
 <script src="staff.js"></script>
 <script src="dashboard.js"></script>
