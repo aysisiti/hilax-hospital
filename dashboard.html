@@ -123,25 +123,40 @@
     </div>
 
     <div id="adm-billing" hidden>
-      <form id="billForm" class="inline-form" novalidate>
-        <h3>New bill</h3>
-        <select id="bl-patient" aria-label="Patient"><option value="">Choose patient</option></select>
-        <div class="form-grid">
-          <input type="text" id="bl-amount" placeholder="Amount (PHP)" inputmode="decimal" maxlength="12" autocomplete="off">
-          <input type="text" id="bl-desc" placeholder="Description" maxlength="500" autocomplete="off">
-        </div>
-        <button type="submit" class="btn-primary">Save</button>
-        <p id="bl-msg" class="form-msg" role="alert"></p>
-      </form>
-      <div class="panel-bar">
-        <select id="bl-filter" aria-label="Filter bills">
-          <option value="">All bills</option>
-          <option value="unpaid">Unpaid</option>
-          <option value="paid">Paid</option>
-        </select>
+      <div id="bl-list-view">
+        <input type="search" id="bl-patient-search" class="search-box" placeholder="Search patient name or number" autocomplete="off">
+        <p id="bl-pt-msg" class="form-msg" role="alert"></p>
+        <div id="bl-patients" class="acc-list"></div>
       </div>
-      <p id="bl-list-msg" class="form-msg" role="alert"></p>
-      <div id="bl-list" class="acc-list"></div>
+
+      <div id="bl-detail-view" hidden>
+        <button type="button" id="bl-back" class="btn-small">&larr; Patients</button>
+        <div class="dash-card st-patient">
+          <h2 id="bl-pt-name"></h2>
+          <p id="bl-pt-sub"></p>
+        </div>
+
+        <form id="billForm" class="inline-form" novalidate>
+          <h3>New bill</h3>
+          <div class="form-grid">
+            <input type="text" id="bl-amount" placeholder="Amount (PHP)" inputmode="decimal" maxlength="12" autocomplete="off">
+            <input type="text" id="bl-desc" placeholder="Description" maxlength="500" autocomplete="off">
+          </div>
+          <button type="submit" class="btn-primary">Save</button>
+          <p id="bl-msg" class="form-msg" role="alert"></p>
+        </form>
+
+        <div class="panel-bar">
+          <input type="search" id="bl-search" placeholder="Search description" autocomplete="off">
+          <select id="bl-filter" aria-label="Filter bills">
+            <option value="">All bills</option>
+            <option value="unpaid">Unpaid</option>
+            <option value="paid">Paid</option>
+          </select>
+        </div>
+        <p id="bl-list-msg" class="form-msg" role="alert"></p>
+        <div id="bl-list" class="acc-list"></div>
+      </div>
     </div>
   </section>
 </main>
