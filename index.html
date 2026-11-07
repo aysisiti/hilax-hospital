@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hilax General Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -22,17 +25,19 @@
 
   <!-- ================= HERO / HOME SECTION ================= -->
   <section id="home" class="hero">
-      <div class="hero-overlay"></div>
       <div class="hero-content">
           <h1>Welcome to Hilax General Hospital</h1>
           <p>Your partner in compassionate and modern healthcare.</p>
+          <a href="#" class="btn-primary" onclick="showOverlay('login'); return false;">Login</a>
       </div>
+      <div class="hero-seal" role="img" aria-label="Hilax Hospital logo"></div>
   </section>
 
   <!-- ================= ABOUT SECTION ================= -->
   <section id="about" class="about-section">
       <h2>About Hilax General Hospital</h2>
       <div class="about-box">
+          <div class="about-history">
           <h3>Hilax General Hospital — History</h3>
           <p>
               Founded in 1998, Hilax General Hospital began as a small community clinic with only four physicians 
@@ -42,25 +47,30 @@
               its systems, embracing digital record-keeping and patient-centered innovation to ensure faster, safer, 
               and more efficient service delivery.
           </p>
+          </div>
 
+          <div>
           <h3>Mission Statement</h3>
           <p>
               To deliver compassionate, quality healthcare to every patient through excellence, integrity, and 
               continuous improvement — ensuring that every individual receives timely and effective medical care.
           </p>
+          </div>
 
+          <div>
           <h3>Vision Statement</h3>
           <p>
               To become a leading regional medical center recognized for patient-focused service, advanced technology, 
               and a collaborative healthcare workforce dedicated to saving lives and improving community well-being.
           </p>
+          </div>
       </div>
   </section>
 
   <!-- ================= LOGIN OVERLAY ================= -->
   <section id="login" class="form-section">
-      <button type="button" class="close-btn" onclick="closeOverlay()">X</button>
       <form id="loginForm">
+          <button type="button" class="close-btn" onclick="closeOverlay()" aria-label="Close">&times;</button>
           <h2>Login</h2>
           <input type="text" id="login-id" placeholder="Email or Patient Number" autocomplete="username" autocapitalize="none" required>
           <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
